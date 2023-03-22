@@ -10,9 +10,10 @@ public class Movement : MonoBehaviour
 
     public CharacterController player;
     public Camera mainCamera;
-    private Vector3 camForward;
-    private Vector3 camRight;
 
+    private Vector3 movePlayer;
+    public float turnSmooth=0f;
+    public float turnSmoothTime = 0f;
 
     public float playerSpeed=10f;
     void Start()
@@ -27,13 +28,14 @@ public class Movement : MonoBehaviour
         playerInput = new Vector3(horizontalMove, 0, verticalMove);
         playerInput = Vector3.ClampMagnitude(playerInput, 1);
 
-        camDirection();
-
-        player.Move(playerInput * playerSpeed * Time.deltaTime);
+        player.Move(new Vector3(horizontalMove, 0, verticalMove) * playerSpeed * Time.deltaTime);
+        PlayerRotate();
     }
-     void camDirection()
+    private void PlayerRotate()
     {
-        camForward = mainCamera.transform.forward;
+        float _targetAngle = Mathf.Atan2(playerInput.x, playerInput.z) * Mathf.Rad2Deg;
+        float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetAngle, ref turnSmooth, turnSmoothTime);
+        transform.rotation = Quaternion.Euler(0f, angle, 0f);
     }
    
 
