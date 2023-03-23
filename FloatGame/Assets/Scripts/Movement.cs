@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Movement : MonoBehaviour
 {
@@ -15,7 +16,11 @@ public class Movement : MonoBehaviour
     public float turnSmooth=0f;
     public float turnSmoothTime = 0f;
 
-    public float playerSpeed=10f;
+    public float playerSpeed=40f;
+
+    [SerializeField] private GameObject imageLostPrefab;
+    [SerializeField] public TextMeshProUGUI Ducklife;
+    int number = 3;
     void Start()
     {
         player = GetComponent<CharacterController>();
@@ -37,6 +42,23 @@ public class Movement : MonoBehaviour
         float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetAngle, ref turnSmooth, turnSmoothTime);
         transform.rotation = Quaternion.Euler(0f, angle, 0f);
     }
-   
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Enemy"))
+        {
+            Debug.Log("enter");
+            number -= 1;
+            Ducklife.text = number.ToString();
+            if (number <= 0)
+            {
+                dead();
+            }
+        }
+    }
+    private void dead()
+    {
+        imageLostPrefab.gameObject.SetActive(true);
+    }
 }
+   
