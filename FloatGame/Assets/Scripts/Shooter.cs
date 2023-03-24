@@ -7,8 +7,11 @@ public class Shooter : MonoBehaviour
     public GameObject Bullet;
     public Transform spawn;
     public float bulletForce = 5000;
+    public float bulletForceDuck = 100;
     public float shootRate = .5f;
     private float shootRateTime = 0;
+    public Rigidbody duck;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -29,6 +32,7 @@ public class Shooter : MonoBehaviour
                 newBullet.GetComponent<Rigidbody>().AddForce(spawn.forward * bulletForce);
                 Destroy(newBullet, 2);
             }
+            duck.AddForce(Vector3.back * bulletForceDuck,ForceMode.Impulse);
         }
     }
 }

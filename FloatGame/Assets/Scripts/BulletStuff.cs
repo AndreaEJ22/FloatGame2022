@@ -11,9 +11,9 @@ public class BulletStuff : MonoBehaviour
 
     Rigidbody rigg;
     public float explForce, radius;
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision other)
     {
-        if (other.CompareTag("DuckCollect"))
+        if (other.gameObject.CompareTag("DuckCollect"))
         {
             numberCollect += 1;
             DuckCollect.text = numberCollect.ToString();
@@ -22,10 +22,10 @@ public class BulletStuff : MonoBehaviour
                 win();
             }
         }
-        if(other.CompareTag("Enemy"))
+        /*if (other.gameObject.CompareTag("Enemy"))
         {
             rigg.AddExplosionForce(explForce, transform.position, radius);
-        }
+        }*/
     }
     private void win()
     {

@@ -15,6 +15,7 @@ public class Movement : MonoBehaviour
     private Vector3 movePlayer;
     public float turnSmooth=0f;
     public float turnSmoothTime = 0f;
+    public float forceBullet = -35;
 
     public float playerSpeed=40f;
 
@@ -34,6 +35,10 @@ public class Movement : MonoBehaviour
         playerInput = Vector3.ClampMagnitude(playerInput, 1);
 
         player.Move(new Vector3(horizontalMove, 0, verticalMove) * playerSpeed * Time.deltaTime);
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            player.Move(new Vector3(horizontalMove, 0,forceBullet) * playerSpeed * Time.deltaTime);
+        }
         PlayerRotate();
     }
     private void PlayerRotate()
@@ -42,10 +47,9 @@ public class Movement : MonoBehaviour
         float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetAngle, ref turnSmooth, turnSmoothTime);
         transform.rotation = Quaternion.Euler(0f, angle, 0f);
     }
-
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision hit)
     {
-        if (other.CompareTag("Enemy"))
+        if (hit.gameObject.CompareTag("Enemy"))
         {
             Debug.Log("enter");
             number -= 1;
@@ -55,6 +59,7 @@ public class Movement : MonoBehaviour
                 dead();
             }
         }
+
     }
     private void dead()
     {
